@@ -20,7 +20,7 @@ function update-airflow-completions
     else
 	rm -f $completions_file
 	set dags (airflow list_dags)
-	printf "Found %i DAGs" (count $dags)
+	printf "Found %i DAGs\n" (count $dags)
 	for dag in $dags[8..-1]
 	    if test -n $dag
 		printf "Loading tasks for DAG '%s' ... " $dag
