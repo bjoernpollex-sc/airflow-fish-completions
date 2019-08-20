@@ -10,7 +10,7 @@ function update-airflow-completions
 	set dag $argv[1]
 	printf "Loading tasks for DAG '%s' ... " $dag
 	set tasks (airflow list_tasks $dag)
-	printf "found %i tasks\n" (count $tasks)
+	printf "found %i tasks\n" (math (count $tasks) - 2)
 	set task_list "$tasks[3..-1]"
 	if test -e $completions_file; and grep -q "^$dag" $completions_file
 	    sed -i '' -e "s/^$dag.*/$dag $task_list/" $completions_file
@@ -100,8 +100,9 @@ complete -c update-airflow-completions -e
 complete -c update-airflow-completions -n '__update-airflow-completions-needs_dag' --no-files -a "(__airflow_list_dags)"
 
 complete -c airflow -e
-complete -c airflow -n '__airflow_needs_command' --no-files -a "clear backfill test"
+complete -c airflow -n '__airflow_needs_command' --no-files -a "clear backfill test list_tasks list_dags"
 complete -c airflow -n '__airflow_using_command test' --no-files -a "(__airflow_list_dags)"
 complete -c airflow -n '__airflow_using_command clear' --no-files -a "(__airflow_list_dags)"
 complete -c airflow -n '__airflow_using_command backfill' --no-files -a "(__airflow_list_dags)"
+complete -c airflow -n '__airflow_using_command list_tasks' --no-files -a "(__airflow_list_dags)"
 complete -c airflow -n '__airflow_tests_task' --no-files -a "(__airflow_list_tasks)"
