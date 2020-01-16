@@ -62,10 +62,10 @@ function __airflow_using_command
 end
 
 
-function __airflow_tests_task
+function __airflow_using_dag
   set cmd (commandline -opc)
   if [ (count $cmd) -eq 3 ]
-    if [ $cmd[2] = 'test' ]
+    if [ $argv[1] = $cmd[2] ]
       return 0
     end
   end
@@ -100,9 +100,11 @@ complete -c update-airflow-completions -e
 complete -c update-airflow-completions -n '__update-airflow-completions-needs_dag' --no-files -a "(__airflow_list_dags)"
 
 complete -c airflow -e
-complete -c airflow -n '__airflow_needs_command' --no-files -a "clear backfill test list_tasks list_dags"
+complete -c airflow -n '__airflow_needs_command' --no-files -a "clear backfill list_dags list_tasks render"
 complete -c airflow -n '__airflow_using_command test' --no-files -a "(__airflow_list_dags)"
 complete -c airflow -n '__airflow_using_command clear' --no-files -a "(__airflow_list_dags)"
 complete -c airflow -n '__airflow_using_command backfill' --no-files -a "(__airflow_list_dags)"
 complete -c airflow -n '__airflow_using_command list_tasks' --no-files -a "(__airflow_list_dags)"
-complete -c airflow -n '__airflow_tests_task' --no-files -a "(__airflow_list_tasks)"
+complete -c airflow -n '__airflow_using_command render' --no-files -a "(__airflow_list_dags)"
+complete -c airflow -n '__airflow_using_dag test' --no-files -a "(__airflow_list_tasks)"
+complete -c airflow -n '__airflow_using_dag render' --no-files -a "(__airflow_list_tasks)"
