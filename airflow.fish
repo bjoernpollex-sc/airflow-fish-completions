@@ -100,7 +100,7 @@ complete -c update-airflow-completions -e
 complete -c update-airflow-completions -n '__update-airflow-completions-needs_dag' --no-files -a "(__airflow_list_dags)"
 
 complete -c airflow -e
-complete -c airflow -n '__airflow_needs_command' --no-files -a "clear backfill list_dags list_tasks render"
+complete -c airflow -n '__airflow_needs_command' --no-files -a "clear backfill list_dags list_tasks render test"
 complete -c airflow -n '__airflow_using_command test' --no-files -a "(__airflow_list_dags)"
 complete -c airflow -n '__airflow_using_command clear' --no-files -a "(__airflow_list_dags)"
 complete -c airflow -n '__airflow_using_command backfill' --no-files -a "(__airflow_list_dags)"
