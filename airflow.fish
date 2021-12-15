@@ -9,9 +9,9 @@ function update-airflow-completions
     if [ (count $argv) -eq 1 ]
 	set dag $argv[1]
 	printf "Loading tasks for DAG '%s' ... " $dag
-	set tasks (airflow list_tasks $dag)
+	set tasks (airflow list_tasks $dag 2>/dev/null | sed "/\[/ d")
 	printf "found %i tasks\n" (math (count $tasks) - 2)
-	set task_list "$tasks[3..-1]"
+	set task_list "$tasks"
 	if test -e $completions_file; and grep -q "^$dag" $completions_file
 	    sed -i '' -e "s/^$dag.*/$dag $task_list/" $completions_file
 	else
@@ -19,14 +19,14 @@ function update-airflow-completions
 	end
     else
 	rm -f $completions_file
-	set dags (airflow list_dags)
+	set dags (airflow list_dags 2>/dev/null | sed -r -e "/--+/ d" -e "1,/DAGS/ d")
 	printf "Found %i DAGs\n" (count $dags)
-	for dag in $dags[8..-1]
+	for dag in $dags
 	    if test -n $dag
 		printf "Loading tasks for DAG '%s' ... " $dag
-		set tasks (airflow list_tasks $dag)
+		set tasks (airflow list_tasks $dag 2>/dev/null | sed "/\[/ d")
 		printf "found %i tasks\n" (count $tasks)
-		echo $dag $tasks[3..-1] >> $completions_file
+		echo $dag $tasks >> $completions_file
 	    end
 	end
     end
